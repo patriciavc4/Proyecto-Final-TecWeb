@@ -8,15 +8,15 @@ function listar()
         success : function(aspirantes)
 
         {
-            let tabla = new DataTable("#Aspirantes")
+            let tabla = $("#Aspirantes").DataTable();
             aspirantes.forEach(aspirante =>
             {
-                let botones = '<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-actualizar"><i class ="icon-envelope-letter"></i></button>';
-                botones = botones + '<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal-actualizar"><i class="icon-user">';
-                botones = botones + '<button type="button" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#modal-actualizar"><i class="icon-printer">';
+                let botones = '<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-correo-individual"><i class ="icon-envelope-letter"></i></button>';
+                botones = botones + '<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal-informacion-alumno"><i class="icon-user"></i></button>';
+                botones = botones + '<button type="button" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#modal-actualizar"><i class="icon-printer"></i></button>';
                 
                 let rowNode = tabla.row
-                    .add([aspirante.nombre, aspirante.correo, botones])
+                    .add([aspirante.nombreUsuario, aspirante.email, botones])
                     .draw()
                     .node().id = "renglon_"+ aspirante.id;
             }

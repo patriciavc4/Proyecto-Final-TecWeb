@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>UPIIZ | Registro de Aspirantes</title>
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
+    <link rel="icon" th:href="@{/img/kaiadmin/favicon.ico}" type="image/x-icon" />
+
+    <script th:src="@{/js/plugin/webfont/webfont.min.js}"></script>
+    <script>
+        WebFont.load({
+            google: { families: ["Public Sans:300,400,500,600,700"] },
+            custom: {
+                families: [
+                    "Font Awesome 5 Solid",
+                    "Font Awesome 5 Regular",
+                    "Font Awesome 5 Brands",
+                    "simple-line-icons",
+                ],
+                urls: ["/css/plugins.min.css"],
+            },
+            active: function () {
+                sessionStorage.fonts = true;
+            },
+        });
+    </script>
+
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/kaiadmin.min.css}" />
+</head>
+<body>
+<div class="wrapper">
+    <div class="sidebar" data-background-color="dark">
+        <div class="sidebar-logo">
+            <div class="logo-header" data-background-color="dark">
+                <a href="#" class="logo text-white fw-bold fs-4">
+                    UPIIZ
+                </a>
+            </div>
+        </div>
+        <div class="sidebar-wrapper scrollbar scrollbar-inner">
+            <div class="sidebar-content">
+                <ul class="nav nav-secondary">
+                    <li class="nav-item active">
+                        <a href="#">
+                            <i class="fas fa-user-plus"></i>
+                            <p>Registro</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="main-panel">
+        <div class="content">
+            <div class="page-inner">
+                <div class="container mt-5">
+                    <div class="row align-items-center justify-content-center" style="min-height: 70vh;">
+
+                        <div class="col-md-5 text-center mb-4 mb-md-0">
+                            <h1 class="display-4 fw-bold" style="color: #1a1d2e;">Enfrenta un nuevo reto</h1>
+                            <p class="lead text-muted">Tú nos inspiras</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card shadow border-0 p-4" style="border-radius: 10px;">
+                                <div class="d-flex justify-content-end mb-3">
+                                    <button class="btn btn-outline-secondary btn-sm rounded-pill">Más información</button>
+                                </div>
+
+                                <form id="formRegistro" method="POST">
+                                    <div class="form-group mb-3">
+                                        <label for="nombre" class="form-label fw-bold text-muted small">Nombre:</label>
+                                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre completo" required />
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label for="telefono" class="form-label fw-bold text-muted small">Teléfono (10 dígitos):</label>
+                                        <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="Ej. 4921234567" required />
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label for="email" class="form-label fw-bold text-muted small">Correo Electrónico:</label>
+                                        <input type="email" class="form-control" id="email" name="email" placeholder="correo@ejemplo.com" required />
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label for="carrera" class="form-label fw-bold text-muted small">Selecciona una carrera:</label>
+                                        <select class="form-select form-control" id="carrera" name="carreraId" required>
+                                            <option value="" disabled selected>Selecciona una opción</option>
+                                            <option value="1">Ingeniería en Sistemas Computacionales</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="d-grid gap-2 text-center">
+                                        <button type="submit" class="btn text-white fw-bold px-5" style="background-color: #5c61a2; border-radius: 5px;">
+                                            Enviar
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/assets/js/core/jquery-3.7.1.min.js}"></script>
+<script th:src="@{/assets/js/core/popper.min.js}"></script>
+<script th:src="@{/assets/js/core/bootstrap.min.js}"></script>
+<script th:src="@{/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js}"></script>
+<script th:src="@{/assets/js/kaiadmin.min.js}"></script>
+</body>
+</html>

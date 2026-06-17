@@ -83,7 +83,7 @@
                     </li>
 
                     <li class="nav-item active">
-                        <a th:href="@{/Carreras}">
+                        <a th:href="@{/carreras}">
                             <i class="fas fa-graduation-cap"></i>
                             <p>Carreras</p>
                         </a>
@@ -148,12 +148,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                            <th>Luis Eduardo Avila</th>
-                                            <th>Lalito@gmail.com</th>
-                                            <th><button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-correo-individual"><i class ="icon-envelope-letter"></i></button>
-                                                 <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal-informacion-alumno"><i class="icon-user"></i></button>
-                                                 <button type="button" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#modal-imprimir"><i class="icon-printer"></i></button>
-                                                </th>
+
                                         </tbody>
                                         <tfoot>
                                         <tr>
@@ -375,21 +370,19 @@
         </div>
     </div>
 </div>
-<script src="../assets/js/core/jquery-3.7.1.min.js"></script>
-<script src="../assets/js/core/popper.min.js"></script>
-<script src="../assets/js/core/bootstrap.min.js"></script>
+<script src="/assets/js/core/jquery-3.7.1.min.js"></script>
+<script src="/assets/js/core/popper.min.js"></script>
+<script src="/assets/js/core/bootstrap.min.js"></script>
 <script src = "/assets/js/jspropios/crud-aspirantes.js"></script>
 
-<script src="../assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-<script src="../assets/js/plugin/datatables/datatables.min.js"></script>
-<script src="../assets/js/kaiadmin.min.js"></script>
-<script src="../assets/js/setting-demo2.js"></script>
-
-<script src="../assets/js/jspropios/crud-carreras.js"></script>
+<script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+<script src="/assets/js/plugin/datatables/datatables.min.js"></script>
+<script src="/assets/js/kaiadmin.min.js"></script>
+<script src="/assets/js/setting-demo2.js"></script>
 
 <script>
     $(document).ready(function () {
-        var miTabla = $("#add-row").DataTable({
+        var miTabla = $("#Aspirantes").DataTable({
             order: [],
             dom: 't<"row mt-3"<"col-sm-12 col-md-4 d-flex align-items-center"l><"col-sm-12 col-md-4 text-center"i><"col-sm-12 col-md-4"p>>',
             language: {

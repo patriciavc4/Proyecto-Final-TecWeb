@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import com.upiiz.proyecto_final.entities.UsuarioEntity;
 import com.upiiz.proyecto_final.repositories.UsuarioRepository;
 
+import java.util.List;
+
 @Service
 public class UsuarioServicelmpl implements UsuarioService {
 
@@ -22,5 +24,10 @@ public class UsuarioServicelmpl implements UsuarioService {
         }
 
         return null;
+    }
+
+    @Override
+    public List<UsuarioEntity> listarUsuarios() {
+        return usuarioRepository.findAll();
     }
 }

@@ -1,0 +1,1 @@
+INSERT IGNORE INTO usuario_entity (usuario, password) VALUES ('admin', '1234');

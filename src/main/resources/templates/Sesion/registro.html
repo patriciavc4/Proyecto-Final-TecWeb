@@ -6,7 +6,7 @@
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
     <link rel="icon" th:href="@{/img/kaiadmin/favicon.ico}" type="image/x-icon" />
 
-    <script th:src="@{/js/plugin/webfont/webfont.min.js}"></script>
+    <script th:src="@{/assets/js/plugin/webfont/webfont.min.js}"></script>
     <script>
         WebFont.load({
             google: { families: ["Public Sans:300,400,500,600,700"] },
@@ -17,7 +17,7 @@
                     "Font Awesome 5 Brands",
                     "simple-line-icons",
                 ],
-                urls: ["/css/plugins.min.css"],
+                urls: ["/assets/css/plugins.min.css"],
             },
             active: function () {
                 sessionStorage.fonts = true;
@@ -64,31 +64,33 @@
 
                         <div class="col-md-6">
                             <div class="card shadow border-0 p-4" style="border-radius: 10px;">
-                                <div class="d-flex justify-content-end mb-3">
-                                    <button class="btn btn-outline-secondary btn-sm rounded-pill">Más información</button>
-                                </div>
 
-                                <form id="formRegistro" method="POST">
+                                <!-- Mensajes -->
+                                <div id="mensajeExito" class="alert alert-success d-none" role="alert"></div>
+                                <div id="mensajeError" class="alert alert-danger d-none" role="alert"></div>
+
+                                <form id="formRegistro">
                                     <div class="form-group mb-3">
                                         <label for="nombre" class="form-label fw-bold text-muted small">Nombre:</label>
-                                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre completo" required />
+                                        <input type="text" class="form-control" id="nombre" placeholder="Nombre completo" required />
                                     </div>
 
                                     <div class="form-group mb-3">
                                         <label for="telefono" class="form-label fw-bold text-muted small">Teléfono (10 dígitos):</label>
-                                        <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="Ej. 4921234567" required />
+                                        <input type="tel" class="form-control" id="telefono" placeholder="Ej. 4921234567"
+                                               pattern="[0-9]{10}" maxlength="10" required />
                                     </div>
 
                                     <div class="form-group mb-3">
                                         <label for="email" class="form-label fw-bold text-muted small">Correo Electrónico:</label>
-                                        <input type="email" class="form-control" id="email" name="email" placeholder="correo@ejemplo.com" required />
+                                        <input type="email" class="form-control" id="email" placeholder="correo@ejemplo.com" required />
+                                        <div id="mensajeEmail" class="text-danger small d-none mt-1">Este correo ya está registrado</div>
                                     </div>
 
                                     <div class="form-group mb-4">
                                         <label for="carrera" class="form-label fw-bold text-muted small">Selecciona una carrera:</label>
-                                        <select class="form-select form-control" id="carrera" name="carreraId" required>
+                                        <select class="form-select form-control" id="carrera" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
-                                            <option value="1">Ingeniería en Sistemas Computacionales</option>
                                         </select>
                                     </div>
 
@@ -113,5 +115,83 @@
 <script th:src="@{/assets/js/core/bootstrap.min.js}"></script>
 <script th:src="@{/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js}"></script>
 <script th:src="@{/assets/js/kaiadmin.min.js}"></script>
+
+<script>
+    $(document).ready(function () {
+
+        // Cargar carreras en el select
+        $.ajax({
+            method: "GET",
+            url: "/carreras/api/carreras",
+            success: function (carreras) {
+                carreras.forEach(function (carrera) {
+                    $("#carrera").append(
+                        '<option value="' + carrera.id + '">' + carrera.nombre + '</option>'
+                    );
+                });
+            }
+        });
+
+        // Validar email en tiempo real (que no se repita)
+        $("#email").on("blur", function () {
+            let email = $(this).val();
+            if (email !== "") {
+                $.ajax({
+                    method: "GET",
+                    url: "/aspirantes/api/verificar-email?email=" + email,
+                    success: function (existe) {
+                        if (existe) {
+                            $("#mensajeEmail").removeClass("d-none");
+                        } else {
+                            $("#mensajeEmail").addClass("d-none");
+                        }
+                    }
+                });
+            }
+        });
+
+        // Enviar registro
+        $("#formRegistro").on("submit", function (e) {
+            e.preventDefault();
+
+            // Validar teléfono
+            let telefono = $("#telefono").val();
+            if (!/^[0-9]{10}$/.test(telefono)) {
+                $("#mensajeError").text("El teléfono debe tener exactamente 10 dígitos").removeClass("d-none");
+                return;
+            }
+
+            // Validar que no haya email repetido
+            if (!$("#mensajeEmail").hasClass("d-none")) {
+                $("#mensajeError").text("Corrige los errores antes de continuar").removeClass("d-none");
+                return;
+            }
+
+            $("#mensajeError").addClass("d-none");
+
+            $.ajax({
+                method: "POST",
+                url: "/aspirantes/api/aspirantes",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    nombre: $("#nombre").val(),
+                    telefono: $("#telefono").val(),
+                    email: $("#email").val(),
+                    carrera: { id: $("#carrera").val() }
+                }),
+                success: function (aspirante) {
+                    $("#mensajeExito").text("¡Registro exitoso! Bienvenido " + aspirante.nombre).removeClass("d-none");
+                    $("#formRegistro")[0].reset();
+                    $("#mensajeError").addClass("d-none");
+                },
+                error: function (xhr) {
+                    let msg = xhr.responseJSON ? xhr.responseJSON.message : "Error al registrar";
+                    $("#mensajeError").text(msg).removeClass("d-none");
+                }
+            });
+        });
+
+    });
+</script>
 </body>
 </html>

@@ -22,7 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
                         String path = request.getRequestURI();
                         HttpSession session = request.getSession();
 
-                        if ((path.startsWith("/carreras") || path.startsWith("/listado")) && session.getAttribute("usuario") == null) {
+                        if ((path.startsWith("/carreras") || path.startsWith("/Aspirantes")) && session.getAttribute("usuario") == null) {
                             response.sendRedirect("/login");
                             return false;
                         }
@@ -35,15 +35,11 @@ public class WebConfig implements WebMvcConfigurer {
                         UsuarioEntity usuario = (UsuarioEntity) session.getAttribute("usuario");
 
                         if (usuario != null && modelAndView != null) {
-                            String nombreCompleto = usuario.getNombreUsuario() + " " +
-                                    usuario.getPrimerApellidoUsuario() + " " +
-                                    usuario.getSegundoApellidoUsuario();
-
-                            modelAndView.addObject("nombreAdmin", nombreCompleto);
+                            modelAndView.addObject("nombreAdmin", usuario.getUsuario());
                         }
                     }
                 })
                 .addPathPatterns("/**")
-                .excludePathPatterns("/login", "/css/**", "/js/**", "/assets/**");
+                .excludePathPatterns("/login", "/registro", "/css/**", "/js/**", "/assets/**");
     }
 }

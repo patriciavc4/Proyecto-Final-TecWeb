@@ -20,19 +20,19 @@ public class AuthController {
     @GetMapping("/login")
     public String login(HttpSession session) {
         if (session.getAttribute("usuario") != null) {
-            return "redirect:/carreras";
+            return "redirect:/Aspirantes";
         }
         return "Sesion/inicio";
     }
 
     @PostMapping("/login")
     @ResponseBody
-    public ResponseEntity<?> loginPost(@RequestParam String email,
+    public ResponseEntity<?> loginPost(@RequestParam String usuario,
                                        @RequestParam String password,
                                        HttpSession session) {
 
         Map<String, Object> respuesta = new HashMap<>();
-        UsuarioEntity user = usuarioService.validarUsuario(email, password);
+        UsuarioEntity user = usuarioService.validarUsuario(usuario, password);
 
         if (user == null) {
             respuesta.put("success", false);
@@ -42,7 +42,7 @@ public class AuthController {
 
         session.setAttribute("usuario", user);
         respuesta.put("success", true);
-        respuesta.put("redirect", "/carreras");
+        respuesta.put("redirect", "/Aspirantes");
 
         return ResponseEntity.ok(respuesta);
     }

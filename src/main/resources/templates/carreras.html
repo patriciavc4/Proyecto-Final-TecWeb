@@ -54,7 +54,7 @@
     <div class="sidebar" data-background-color="dark">
         <div class="sidebar-logo">
             <div class="logo-header" style="margin-top: 30px;">
-                <a href="inicio" class="logo">
+                <a href="Aspirantes" class="logo">
                     <img
                             src="../assets/img/logo_adm3.png"
                             alt="Logo"
@@ -69,16 +69,9 @@
                 <ul class="nav nav-secondary">
 
                     <li class="nav-item">
-                        <a href="inicio">
-                            <i class="fas fa-home"></i>
-                            <p>Inicio</p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="listado">
+                        <a href="Aspirantes">
                             <i class="fas fa-list"></i>
-                            <p>Listado</p>
+                            <p>Aspirantes</p>
                         </a>
                     </li>
 
@@ -95,7 +88,6 @@
                             <p>Salir</p>
                         </a>
                     </li>
-
                 </ul>
             </div>
         </div>
@@ -367,7 +359,7 @@
             }
         });
 
-        // Conectar el nuevo buscador con la tabla
+
         $('#buscador-custom').on('keyup', function () {
             miTabla.search(this.value).draw();
         });

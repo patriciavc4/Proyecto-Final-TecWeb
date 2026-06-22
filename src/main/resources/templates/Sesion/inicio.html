@@ -107,9 +107,8 @@
 
             <form id="loginForm">
                 <div class="mb-3">
-                    <label for="email" class="form-label text-muted fw-bold">CORREO ELECTRÓNICO</label>
-                    <input type="email" class="form-control" id="email" placeholder="" required>
-                </div>
+                    <label for="usuario" class="form-label text-muted fw-bold">USUARIO</label>
+                    <input type="text" class="form-control" id="usuario" placeholder="" required></div>
                 <div class="mb-4">
                     <label for="password" class="form-label text-muted fw-bold">CONTRASEÑA</label>
                     <input type="password" class="form-control" id="password" placeholder="" required>
@@ -138,7 +137,7 @@
                 url: "/login",
                 type: "POST",
                 data: {
-                    email: $("#email").val(),
+                    usuario: $("#usuario").val(),
                     password: $("#password").val()
                 },
                 success: function(response) {

@@ -89,13 +89,13 @@
 
                                     <div class="form-group mb-4">
                                         <label for="carrera" class="form-label fw-bold text-muted small">Selecciona una carrera:</label>
-                                        <select class="form-select form-control" id="carrera-aspirantes" required onclick = "cargarCarreras()">
+                                        <select class="form-select form-control" id="carrera" required>
                                             <option value="" disabled selected>Selecciona una opción</option>
                                         </select>
                                     </div>
 
                                     <div class="d-grid gap-2 text-center">
-                                        <button type="button" class="btn text-white fw-bold px-5" style="background-color: #5c61a2; border-radius: 5px;" onclick = "guardar()">
+                                        <button type="submit" class="btn text-white fw-bold px-5" style="background-color: #5c61a2; border-radius: 5px;">
                                             Enviar
                                         </button>
                                     </div>
@@ -115,7 +115,7 @@
 <script th:src="@{/assets/js/core/bootstrap.min.js}"></script>
 <script th:src="@{/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js}"></script>
 <script th:src="@{/assets/js/kaiadmin.min.js}"></script>
-<script src = "assets/js/jspropios/crud-aspirantes.js"></script>
+
 <script>
     $(document).ready(function () {
 
@@ -138,7 +138,7 @@
             if (email !== "") {
                 $.ajax({
                     method: "GET",
-                    url: "/aspirantes/api/verificar-email?email=" + email,
+                    url: "/Aspirantes/api/verificar-email?email=" + email,
                     success: function (existe) {
                         if (existe) {
                             $("#mensajeEmail").removeClass("d-none");
@@ -167,17 +167,24 @@
                 return;
             }
 
+            // Validar que se haya seleccionado una carrera
+            let carreraId = parseInt($("#carrera").val());
+            if (isNaN(carreraId)) {
+                $("#mensajeError").text("Selecciona una carrera").removeClass("d-none");
+                return;
+            }
+
             $("#mensajeError").addClass("d-none");
 
             $.ajax({
                 method: "POST",
-                url: "/aspirantes/api/aspirantes",
+                url: "/Aspirantes/api/guardar",
                 contentType: "application/json",
                 data: JSON.stringify({
                     nombre: $("#nombre").val(),
                     telefono: $("#telefono").val(),
                     email: $("#email").val(),
-                    carrera: { id: $("#carrera").val() }
+                    carrera: { id: carreraId }
                 }),
                 success: function (aspirante) {
                     $("#mensajeExito").text("¡Registro exitoso! Bienvenido " + aspirante.nombre).removeClass("d-none");

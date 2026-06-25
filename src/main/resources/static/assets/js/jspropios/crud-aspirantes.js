@@ -1,106 +1,150 @@
-function listar()
-{
+// ─── Listar aspirantes al cargar ────────────────────────────────────────────
+function listar() {
     $.ajax({
-        method : "GET",
-        url : "/Aspirantes/api/Aspirantes",
-        data : {},
-
-        success : function(aspirantes)
-
-        {
+        method: "GET",
+        url: "/Aspirantes/api/Aspirantes",
+        success: function (aspirantes) {
             let tabla = $("#Aspirantes").DataTable();
-            aspirantes.forEach(aspirante =>
-            {
-                let botones = '<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-correo-individual"><i class ="icon-envelope-letter"></i></button>';
-                botones = botones + '<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal-informacion-alumno"><i class="icon-user"></i></button>';
-                botones = botones + '<button type="button" class="btn btn-default" data-bs-toggle="modal" data-bs-target="#modal-actualizar"><i class="icon-printer"></i></button>';
-                
-                let rowNode = tabla.row
-                    .add([aspirante.nombre, aspirante.email, botones])
-                    .draw()
-                    .node().id = "renglon_"+ aspirante.id;
+            tabla.clear();
+
+            aspirantes.forEach(function (aspirante) {
+                let botones =
+                    '<button type="button" class="btn btn-success btn-sm me-1" ' +
+                    'onclick="abrirCorreoIndividual(' + aspirante.id + ', \'' + aspirante.nombre + '\')" >' +
+                    '<i class="icon-envelope-letter"></i></button>' +
+                    '<button type="button" class="btn btn-warning btn-sm me-1" ' +
+                    'onclick="verInformacion(' + aspirante.id + ')">' +
+                    '<i class="icon-user"></i></button>';
+
+                let row = tabla.row.add([aspirante.nombre, aspirante.email, botones]).draw();
+                row.node().id = "renglon_" + aspirante.id;
+            });
+        },
+        error: function () {
+            alert("Error al cargar los aspirantes.");
+        }
+    });
+}
+
+// ─── Validar email (AJAX al perder el foco) ──────────────────────────────────
+$('#email').on('blur', function () {
+    let email = $(this).val().trim();
+    if (!email) return;
+
+    $.ajax({
+        method: "GET",
+        url: "/Aspirantes/api/verificar-email",
+        data: { email: email },
+        success: function (existe) {
+            if (existe) {
+                $('#email-error').show();
+                $('#btn-guardar').prop('disabled', true);
+            } else {
+                $('#email-error').hide();
+                $('#btn-guardar').prop('disabled', false);
             }
-            )
         }
-    })
-}
+    });
+});
 
-function guardar()
-{
-    let nombreAspirante = document.getElementById('nombre').value;
-    let telefono = document.getElementById('telefono').value;
-    let correoElectronico = document.getElementById('email').value;
-    let carreraAspirante = document.getElementById('carrera-aspirantes').value;
+// ─── Guardar aspirante ────────────────────────────────────────────────────────
+$('#btn-guardar').on('click', function () {
+    let nombre = $('#nombre').val().trim();
+    let email  = $('#email').val().trim();
+
+    // Validación HTML5 / regex en JS
+    let soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+    if (!soloLetras.test(nombre)) {
+        alert("El nombre solo debe contener letras.");
+        return;
+    }
+    let regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!regexEmail.test(email)) {
+        alert("Ingresa un correo válido.");
+        return;
+    }
+    if ($('#email-error').is(':visible')) {
+        alert("El correo ya está registrado.");
+        return;
+    }
+
+    let aspirante = { nombre: nombre, email: email };
 
     $.ajax({
-        method : "POST",
-        url : "/aspirantes/api/aspirantes",
-        contentType : "application/json",
-
-        data : JSON.stringify({
-            nombre : nombreAspirante,
-            telefono : telefono,
-            email : correoElectronico,
-            carrera : { 
-                id : carreraAspirante // Asegúrate de que "id" coincida con el nombre de la llave primaria en tu CarreraEntity
-            }
-        }),
-        success : function(mascota)
-        {
-
-                alert("Aspirante guardado exitosamente");
-                limpiarFormulario();
+        url: "/Aspirantes/api/guardar",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(aspirante),
+        success: function () {
+            alert("Aspirante registrado correctamente.");
+            $('#modal-agregar-aspirante').modal('hide');
+            $('#form-nuevo-aspirante')[0].reset();
+            $('#btn-guardar').prop('disabled', false);
+            listar();
+        },
+        error: function (xhr) {
+            let resp = xhr.responseJSON;
+            alert(resp && resp.error ? resp.error : "Error al registrar el aspirante.");
         }
-    })
-}
+    });
+});
 
-function limpiarFormulario()
-{
-    document.getElementById('nombre').value = "";
-    document.getElementById('telefono').value = "";
-    document.getElementById('email').value = "";
-}
+// ─── Correo masivo ────────────────────────────────────────────────────────────
+function correoMasivo() {
+    let asunto  = $('#asunto-masivo').val().trim();
+    let mensaje = $('#mensaje-masivo').val().trim();
 
-function cargarCarreras()
-{
-    $('#carrera-aspirantes').removeAttr('onclick')
+    if (!asunto || !mensaje) {
+        alert("Completa el asunto y el mensaje.");
+        return;
+    }
+
     $.ajax({
-        method : "GET",
-        url : "/carreras/api/carreras",
-        data : {},
-
-        success : function(carreras)
-        {
-            $.each(carreras, function(index, carrera)
-        {
-            $('#carrera-aspirantes').append((
-                $('<option>',
-                    {
-                        value: carrera.id,
-                        text : carrera.nombre
-                    }
-                )
-            ))
-        })
+        method: "POST",
+        url: "/Aspirantes/api/correo/masivo",
+        contentType: "application/json",
+        data: JSON.stringify({ asunto: asunto, mensaje: mensaje }),
+        success: function (resp) {
+            alert(resp.mensaje);
+            $('#modal-correo-masivo').modal('hide');
+        },
+        error: function () {
+            alert("Error al enviar el correo masivo.");
         }
-    })
+    });
 }
 
+// ─── Correo individual ────────────────────────────────────────────────────────
+let aspiranteIdSeleccionado = null;
 
-function correoIndividual()
-{
-    $.ajax({
-        method : "GET",
-        url : "/Aspirantes/correo/Individual",
-        data : {}
-    })
+function abrirCorreoIndividual(id, nombre) {
+    aspiranteIdSeleccionado = id;
+    $('#modal-correo-individual .modal-title span').text("Enviar correo a " + nombre);
+    $('#asunto-individual').val('');
+    $('#mensaje-individual').val('');
+    $('#modal-correo-individual').modal('show');
 }
 
-function informacionPersonal()
-{
+function correoIndividual() {
+    let asunto  = $('#asunto-individual').val().trim();
+    let mensaje = $('#mensaje-individual').val().trim();
+
+    if (!asunto || !mensaje) {
+        alert("Completa el asunto y el mensaje.");
+        return;
+    }
+
     $.ajax({
-        method : "GET",
-        url : "/Aspirantes/informacion/Personal",
-        data : {}
-    })
+        method: "POST",
+        url: "/Aspirantes/api/correo/individual/" + aspiranteIdSeleccionado,
+        contentType: "application/json",
+        data: JSON.stringify({ asunto: asunto, mensaje: mensaje }),
+        success: function (resp) {
+            alert(resp.mensaje);
+            $('#modal-correo-individual').modal('hide');
+        },
+        error: function () {
+            alert("Error al enviar el correo.");
+        }
+    });
 }

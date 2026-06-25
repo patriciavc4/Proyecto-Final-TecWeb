@@ -33,4 +33,5 @@ public class AspiranteServiceImpl implements AspiranteService {
     public boolean existeEmail(String email) {
         return aspiranteRepository.existsByEmail(email);
     }
+
 }

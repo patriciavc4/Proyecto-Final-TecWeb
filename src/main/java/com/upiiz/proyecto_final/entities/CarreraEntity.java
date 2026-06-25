@@ -4,10 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "CarreraEntity")
 public class CarreraEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +16,7 @@ public class CarreraEntity {
 
     public CarreraEntity() {}
 
-    public CarreraEntity(Long id, String nombre, String observaciones, int semestres) {
+    public CarreraEntity(Long id, String nombre, String observaciones, Integer semestres) {
         this.id = id;
         this.nombre = nombre;
         this.observaciones = observaciones;
@@ -49,11 +47,11 @@ public class CarreraEntity {
         this.observaciones = observaciones;
     }
 
-    public int getSemestres() {
+    public Integer getSemestres() {
         return semestres;
     }
 
-    public void setSemestres(int semestres) {
+    public void setSemestres(Integer semestres) {
         this.semestres = semestres;
     }
 }

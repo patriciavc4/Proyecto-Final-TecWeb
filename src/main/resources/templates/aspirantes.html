@@ -281,6 +281,30 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modal-agregar-aspirante" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"><h5>Nuevo Aspirante</h5></div>
+                <div class="modal-body">
+                    <form id="form-nuevo-aspirante">
+                        <div class="form-group">
+                            <label>Nombre</label>
+                            <input type="text" id="nombre" class="form-control" required pattern="[A-Za-z\s]+" title="Solo letras">
+                        </div>
+                        <div class="form-group">
+                            <label>Correo</label>
+                            <input type="email" id="email" class="form-control" required>
+                            <small id="email-error" class="text-danger" style="display:none;">Este correo ya existe.</small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal informacion alumno -->
     <div
             class="modal fade"

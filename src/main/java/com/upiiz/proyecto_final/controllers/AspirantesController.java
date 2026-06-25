@@ -22,7 +22,7 @@ public class AspirantesController {
     }
 
     // Devuelve todos los aspirantes en JSON (para llenar la tabla con AJAX)
-    @GetMapping("/aspirantes/api/aspirantes")
+    @GetMapping("/Aspirantes/api/Aspirantes")
     @ResponseBody
     public ResponseEntity<List<AspiranteEntity>> listadoAspirantes() {
         return ResponseEntity.ok(aspiranteService.listado());

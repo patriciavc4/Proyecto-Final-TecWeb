@@ -89,13 +89,13 @@
 
                                     <div class="form-group mb-4">
                                         <label for="carrera" class="form-label fw-bold text-muted small">Selecciona una carrera:</label>
-                                        <select class="form-select form-control" id="carrera" required>
+                                        <select class="form-select form-control" id="carrera-aspirantes" required onclick = "cargarCarreras()">
                                             <option value="" disabled selected>Selecciona una opción</option>
                                         </select>
                                     </div>
 
                                     <div class="d-grid gap-2 text-center">
-                                        <button type="submit" class="btn text-white fw-bold px-5" style="background-color: #5c61a2; border-radius: 5px;">
+                                        <button type="button" class="btn text-white fw-bold px-5" style="background-color: #5c61a2; border-radius: 5px;" onclick = "guardar()">
                                             Enviar
                                         </button>
                                     </div>
@@ -115,7 +115,7 @@
 <script th:src="@{/assets/js/core/bootstrap.min.js}"></script>
 <script th:src="@{/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js}"></script>
 <script th:src="@{/assets/js/kaiadmin.min.js}"></script>
-
+<script src = "assets/js/jspropios/crud-aspirantes.js"></script>
 <script>
     $(document).ready(function () {
 

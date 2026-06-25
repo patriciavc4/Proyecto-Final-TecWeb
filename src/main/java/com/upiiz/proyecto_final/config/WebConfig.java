@@ -40,6 +40,6 @@ public class WebConfig implements WebMvcConfigurer {
                     }
                 })
                 .addPathPatterns("/**")
-                .excludePathPatterns("/login", "/registro", "/css/**", "/js/**", "/assets/**");
+                .excludePathPatterns("/login", "/registro", "/css/**", "/js/**", "/assets/**", "/carreras/api/carreras");
     }
 }
